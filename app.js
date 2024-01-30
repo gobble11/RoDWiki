@@ -1,12 +1,8 @@
-
 // Function to fetch data from SQLite database
 async function fetchDataFromDatabase() {
     // Load the SQL.js library
-    const SQL = await new Promise(resolve => {
-        const script = document.createElement('script');
-        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.1/sql-wasm.js';
-        script.onload = () => resolve(window.SQL);
-        document.head.appendChild(script);
+    const SQL = await initSqlJs({
+        locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.1/${file}`
     });
 
     // Replace the path with the correct relative path to your SQLite file
@@ -18,7 +14,7 @@ async function fetchDataFromDatabase() {
     const db = new SQL.Database(dbData);
 
     // Execute a sample query (replace with your actual query)
-    const query = 'SELECT * FROM ItemsView';
+    const query = 'SELECT * FROM your_table';
     const result = db.exec(query);
 
     return result[0].values;
@@ -27,6 +23,10 @@ async function fetchDataFromDatabase() {
 // Function to create dynamic table
 async function createDynamicTable() {
     try {
+        const SQL = await initSqlJs({
+            locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.1/${file}`
+        });
+
         const data = await fetchDataFromDatabase();
         const table = document.getElementById('dynamic-table');
 
@@ -34,7 +34,7 @@ async function createDynamicTable() {
         table.innerHTML = '';
 
         // Display column headers
-        const headers = ['WorkBench_Name', 'Item_Category', 'Item', 'Child', 'Item_Cost_Amount']; // Replace with your actual column names
+        const headers = ['WorkBench_Name', 'Item_Category', 'Item', 'Child', 'Item_Cost_Amount'];
         const headerRow = table.insertRow();
         headers.forEach(header => {
             const th = document.createElement('th');
@@ -54,6 +54,7 @@ async function createDynamicTable() {
         console.error('Error creating dynamic table:', error);
     }
 }
+
 
 // Call the function to create the dynamic table on page load
 document.addEventListener('DOMContentLoaded', createDynamicTable);
