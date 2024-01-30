@@ -1,6 +1,5 @@
-// Function to fetch data from SQLite database
-async function fetchDataFromDatabase() {
     // Load the SQL.js library
+    const initSqlJs = require('sql.js');
     const SQL = await initSqlJs({
         locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.1/${file}`
     });
@@ -14,7 +13,7 @@ async function fetchDataFromDatabase() {
     const db = new SQL.Database(dbData);
 
     // Execute a sample query (replace with your actual query)
-    const query = 'SELECT * FROM your_table';
+    const query = 'SELECT * FROM ItemsView';
     const result = db.exec(query);
 
     return result[0].values;
