@@ -22,29 +22,34 @@ async function fetchDataFromDatabase() {
 
 // Function to create dynamic table
 async function createDynamicTable() {
-    const data = await fetchDataFromDatabase();
-    const table = document.getElementById('dynamic-table');
+    try {
+        const data = await fetchDataFromDatabase();
+        const table = document.getElementById('dynamic-table');
 
-    // Clear existing rows
-    table.innerHTML = '';
+        // Clear existing rows
+        table.innerHTML = '';
 
-    // Display column headers
-    const headers = ['WorkBench_Name', 'Item_Category', 'Item', 'Child', 'Item_Cost_Amount']; // Replace with your actual column names
-    const headerRow = table.insertRow();
-    headers.forEach(header => {
-        const th = document.createElement('th');
-        th.textContent = header;
-        headerRow.appendChild(th);
-    });
+        // Display column headers
+        const headers = ['WorkBench_Name', 'Item_Category', 'Item', 'Child', 'Item_Cost_Amount']; // Replace with your actual column names
 
-    // Display data rows
-    data.forEach(rowData => {
-        const row = table.insertRow();
-        rowData.forEach(value => {
-            const cell = row.insertCell();
-            cell.textContent = value;
+        const headerRow = table.insertRow();
+        headers.forEach(header => {
+            const th = document.createElement('th');
+            th.textContent = header;
+            headerRow.appendChild(th);
         });
-    });
+
+        // Display data rows
+        data.forEach(rowData => {
+            const row = table.insertRow();
+            rowData.forEach(value => {
+                const cell = row.insertCell();
+                cell.textContent = value;
+            });
+        });
+    } catch (error) {
+        console.error('Error creating dynamic table:', error);
+    }
 }
 
 // Load the SQL.js library and call createDynamicTable
