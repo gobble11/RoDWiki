@@ -1,8 +1,12 @@
+
 // Function to fetch data from SQLite database
 async function fetchDataFromDatabase() {
     // Load the SQL.js library
-    const SQL = await initSqlJs({
-        locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.1/${file}`
+    const SQL = await new Promise(resolve => {
+        const script = document.createElement('script');
+        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.1/sql-wasm.js';
+        script.onload = () => resolve(window.SQL);
+        document.head.appendChild(script);
     });
 
     // Replace the path with the correct relative path to your SQLite file
@@ -31,7 +35,6 @@ async function createDynamicTable() {
 
         // Display column headers
         const headers = ['WorkBench_Name', 'Item_Category', 'Item', 'Child', 'Item_Cost_Amount']; // Replace with your actual column names
-
         const headerRow = table.insertRow();
         headers.forEach(header => {
             const th = document.createElement('th');
@@ -52,11 +55,5 @@ async function createDynamicTable() {
     }
 }
 
-// Load the SQL.js library and call createDynamicTable
-initSqlJs({
-    locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.1/${file}`
-}).then(() => {
-    createDynamicTable();
-}).catch(error => {
-    console.error('Error loading SQL.js:', error);
-});
+// Call the function to create the dynamic table on page load
+document.addEventListener('DOMContentLoaded', createDynamicTable);
