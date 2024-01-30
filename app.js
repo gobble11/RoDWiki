@@ -1,20 +1,16 @@
 // Function to fetch data from SQLite database
 async function fetchDataFromDatabase() {
+    // Load the SQL.js library
+    const SQL = await initSqlJs({
+        locateFile: file => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.1/${file}`
+    });
+
     // Replace the path with the correct relative path to your SQLite file
     const response = await fetch('assets/RodWiki.sqlite');
     const buffer = await response.arrayBuffer();
     const dbData = new Uint8Array(buffer);
 
-    // Load the SQL.js library
-    const sqlJsScript = document.createElement('script');
-    sqlJsScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.6.1/sql-wasm.js';
-    document.head.appendChild(sqlJsScript);
-
-    // Wait for the script to load before proceeding
-    await new Promise(resolve => sqlJsScript.onload = resolve);
-
     // Create a new SQL.js database
-    const SQL = window.SQL;
     const db = new SQL.Database(dbData);
 
     // Execute a sample query (replace with your actual query)
